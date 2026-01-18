@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "camera.h"
 #include "mesh.h"
+#include <cmath> //for round
 
 Image::Image() {
 	width = 0; height = 0;
@@ -16,8 +17,8 @@ Image::Image() {
 
 Image::Image(unsigned int width, unsigned int height)
 {
-	this->width = width;
-	this->height = height;
+	this->width = width; //wiwdth its x0 and x1
+	this->height = height; //height its y0 and y1
 	pixels = new Color[width*height];
 	memset(pixels, 0, width * height * sizeof(Color));
 }
@@ -56,7 +57,7 @@ Image& Image::operator = (const Image& c)
 
 Image::~Image()
 {
-	if(pixels) 
+	if(pixels)
 		delete[] pixels;
 }
 
@@ -104,7 +105,7 @@ Image Image::GetArea(unsigned int start_x, unsigned int start_y, unsigned int wi
 	for(unsigned int x = 0; x < width; ++x)
 		for(unsigned int y = 0; y < height; ++y)
 		{
-			if( (x + start_x) < this->width && (y + start_y) < this->height) 
+			if( (x + start_x) < this->width && (y + start_y) < this->height)
 				result.SetPixelUnsafe( x, y, GetPixel(x + start_x,y + start_y) );
 		}
 	return result;
@@ -124,6 +125,36 @@ void Image::FlipY()
 		memcpy(pos2, temp_row, row_size);
 	}
 	delete[] temp_row;
+}
+
+//Drawing lines by DDA
+
+void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
+{
+    //cordenades pel DrawLineDDA
+    int dx = x1-x0;
+    int dy = y1-y0;
+    int screen_steps = std::max(abs(dx), abs(dy));
+
+    //cas unic de un solo punto
+    if (screen_steps == 0) {
+            SetPixel(x0, y0, c);
+            return;
+    }
+
+    float stepX = dx / (float)screen_steps; //normalitzacio del setpX respct el eix X
+	float stepY = dy / (float)screen_steps; //normalitzacio del setpY respct el eix Y
+
+	//coordenades de on comenzara la linea
+	float x = x0;
+	float y = y0;
+
+	//drawiwng line
+	for (int i = 0; i <= screen_steps; i++) {
+	    SetPixel((int)std::round(x), (int)std::round(y), c); //fiquem color
+	    x += stepX; // Increment x + step
+		y += stepY; // Increment y + step
+	}
 }
 
 bool Image::LoadPNG(const char* filename, bool flip_y)
@@ -161,7 +192,7 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 
 	size_t bufferSize = out_image.size();
 	unsigned int originalBytesPerPixel = (unsigned int)bufferSize / (width * height);
-	
+
 	// Force 3 channels
 	bytes_per_pixel = 3;
 
@@ -219,10 +250,10 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 	}
 
 	TGAInfo* tgainfo = new TGAInfo;
-    
+
 	tgainfo->width = header[1] * 256 + header[0];
 	tgainfo->height = header[3] * 256 + header[2];
-    
+
 	if (tgainfo->width <= 0 || tgainfo->height <= 0 || (header[4] != 24 && header[4] != 32))
 	{
 		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
@@ -230,20 +261,20 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 		delete tgainfo;
 		return NULL;
 	}
-    
+
 	tgainfo->bpp = header[4];
 	bytesPerPixel = tgainfo->bpp / 8;
 	imageSize = tgainfo->width * tgainfo->height * bytesPerPixel;
-    
+
 	tgainfo->data = new unsigned char[imageSize];
-    
+
 	if (tgainfo->data == NULL || fread(tgainfo->data, 1, imageSize, file) != imageSize)
 	{
 		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
 
 		if (tgainfo->data != NULL)
 			delete[] tgainfo->data;
-            
+
 		fclose(file);
 		delete tgainfo;
 		return false;

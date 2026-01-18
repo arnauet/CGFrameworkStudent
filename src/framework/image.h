@@ -52,10 +52,10 @@ public:
 	// Get the pixel at position x,y
 	Color GetPixel(unsigned int x, unsigned int y) const { return pixels[ y * width + x ]; }
 	Color& GetPixelRef(unsigned int x, unsigned int y)	{ return pixels[ y * width + x ]; }
-	Color GetPixelSafe(unsigned int x, unsigned int y) const {	
-		x = clamp((unsigned int)x, 0, width-1); 
-		y = clamp((unsigned int)y, 0, height-1); 
-		return pixels[ y * width + x ]; 
+	Color GetPixelSafe(unsigned int x, unsigned int y) const {
+		x = clamp((unsigned int)x, 0, width-1);
+		y = clamp((unsigned int)y, 0, height-1);
+		return pixels[ y * width + x ];
 	}
 
 	// Set the pixel at position x,y with value C
@@ -64,11 +64,14 @@ public:
 
 	void Resize(unsigned int width, unsigned int height);
 	void Scale(unsigned int width, unsigned int height);
-	
+
 	void FlipY(); // Flip the image top-down
 
 	// Fill the image with the color C
 	void Fill(const Color& c) { for(unsigned int pos = 0; pos < width*height; ++pos) pixels[pos] = c; }
+
+	// We add the signature for 2.1.1 for LAB1
+	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
 
 	// Returns a new image with the area from (startx,starty) of size width,height
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);
@@ -103,7 +106,7 @@ public:
 	unsigned int height;
 	float* pixels;
 
-	// CONSTRUCTORS 
+	// CONSTRUCTORS
 	FloatImage() { width = height = 0; pixels = NULL; }
 	FloatImage(unsigned int width, unsigned int height);
 	FloatImage(const FloatImage& c);

@@ -1,7 +1,7 @@
 #include "application.h"
 #include "mesh.h"
 #include "shader.h"
-#include "utils.h" 
+#include "utils.h"
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -31,9 +31,13 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
+    framebuffer.Fill(Color::BLACK);
 	// ...
+	framebuffer.DrawLineDDA(50, 50, 50 + 100 * cos(time), 50 + 100 * sin(time), Color::CYAN);
+
 
 	framebuffer.Render();
+
 }
 
 // Called after render
@@ -42,7 +46,7 @@ void Application::Update(float seconds_elapsed)
 
 }
 
-//keyboard press event 
+//keyboard press event
 void Application::OnKeyPressed( SDL_KeyboardEvent event )
 {
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
@@ -67,7 +71,7 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-	
+
 }
 
 void Application::OnWheel(SDL_MouseWheelEvent event)
@@ -78,6 +82,6 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 }
 
 void Application::OnFileChanged(const char* filename)
-{ 
+{
 	Shader::ReloadSingleShader(filename);
 }

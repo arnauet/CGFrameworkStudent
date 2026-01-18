@@ -234,28 +234,28 @@ Matrix44 Matrix44::GetRotationOnly()
 {
 	Vector3 v;
 	Matrix44 result; // constructor already sets identity
-	
+
 	// right
 	v.Set(m[0], m[1], m[2]);
 	v = v.Normalize();
 	result.m[0] = v.x;
 	result.m[1] = v.y;
 	result.m[2] = v.z;
-	
+
 	// up
 	v.Set(m[4], m[5], m[6]);
 	v = v.Normalize();
 	result.m[4] = v.x;
 	result.m[5] = v.y;
 	result.m[6] = v.z;
-	
+
 	// front
 	v.Set(m[8], m[9], m[10]);
 	v = v.Normalize();
 	result.m[8] = v.x;
 	result.m[9] = v.y;
 	result.m[10] = v.z;
-	
+
 	return result;
 }
 
@@ -264,7 +264,7 @@ bool Matrix44::GetXYZ(float* euler) const
 	// see https://en.wikipedia.org/wiki/Euler_angles Tait-Bryan -> angles table -> XYZ row
 
 	// Code adapted from www.geometrictools.com  (math column major)
-	//	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ 
+	//	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ
     // +-           -+   +-                                        -+
     // | r00 r01 r02 |   |  cy*cz           -cy*sz            sy    |
     // | r10 r11 r12 | = |  cz*sx*sy+cx*sz   cx*cz-sx*sy*sz  -cy*sx |
@@ -318,7 +318,7 @@ Matrix44 Matrix44::operator*(const Matrix44& matrix) const
 		for (j=0;j<4;j++)
 		{
 			ret.M[i][j]=0.0;
-			for (k=0;k<4;k++) 
+			for (k=0;k<4;k++)
 				ret.M[i][j] += M[k][j] * matrix.M[i][k];
 		}
 	}
@@ -327,18 +327,18 @@ Matrix44 Matrix44::operator*(const Matrix44& matrix) const
 }
 
 //it allows to add two vectors
-Vector3 operator + (const Vector3& a, const Vector3& b) 
+Vector3 operator + (const Vector3& a, const Vector3& b)
 {
 	return Vector3(a.x + b.x, a.y + b.y, a.z + b.z );
 }
 
 //it allows to add two vectors
-Vector3 operator - (const Vector3& a, const Vector3& b) 
+Vector3 operator - (const Vector3& a, const Vector3& b)
 {
 	return Vector3(a.x - b.x, a.y - b.y, a.z - b.z );
 }
 
-Vector3 operator * (const Vector3& a, float v) 
+Vector3 operator * (const Vector3& a, float v)
 {
 	return Vector3(a.x * v, a.y * v, a.z * v);
 }
@@ -369,9 +369,9 @@ Vector4 operator * (const Matrix44& matrix, const Vector4& v)
 
 //Multiplies a vector by a matrix and returns the new vector ( assumes v4 = (v.x, v.y, v.z, 1) )
 Vector3 operator * (const Matrix44& matrix, const Vector3& v)
-{   
-   float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12]; 
-   float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13]; 
+{
+   float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12];
+   float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13];
    float z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14];
    return Vector3(x,y,z);
 }
@@ -445,7 +445,7 @@ void Matrix44::SetFrontAndOrthonormalize(Vector3 front)
 	m[8] = front.x;
 	m[9] = front.y;
 	m[10] = front.z;
-	
+
 }
 
 bool Matrix44::Inverse()
@@ -465,7 +465,7 @@ bool Matrix44::Inverse()
 
    unsigned int m,n;
    m = n = 4;
-	
+
    for (i = 0; i < m; i++)
    {
       // Look for largest element in column
@@ -476,7 +476,7 @@ bool Matrix44::Inverse()
 		 if ( fabs(temp.M[j][i]) > fabs( temp.M[swap][i]) )
             swap = j;
 	  }
-   
+
       if (swap != i)
       {
          // Swap rows.
@@ -489,7 +489,7 @@ bool Matrix44::Inverse()
 
       // No non-zero pivot.  The CMatrix is singular, which shouldn't
       // happen.  This means the user gave us a bad CMatrix.
-	  
+
 #define MATRIX_SINGULAR_THRESHOLD 0.00001 //change this if you experience problems with matrices
       if ( fabsf(temp.M[i][i]) <= MATRIX_SINGULAR_THRESHOLD)
 	  {
