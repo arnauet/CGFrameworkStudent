@@ -8,7 +8,6 @@
 #include "utils.h"
 #include "camera.h"
 #include "mesh.h"
-#include <cmath> //for round
 
 Image::Image() {
 	width = 0; height = 0;
@@ -127,7 +126,7 @@ void Image::FlipY()
 	delete[] temp_row;
 }
 
-//Drawing lines by DDA method Primitiva 2.1.2
+//Drawing lines by DDA method Primitive 2.1.2
 
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 {
@@ -142,10 +141,11 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
             return;
     }
 
+    //computing direction step vectors to advance each cordinate
     float stepX = dx / (float)screen_steps; //normalitzacio del setpX respct el eix X
 	float stepY = dy / (float)screen_steps; //normalitzacio del setpY respct el eix Y
 
-	//coordenades de on comenzara la linea
+	//coordenades d'on comenca la linea
 	float x = x0;
 	float y = y0;
 
@@ -163,9 +163,7 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
     int borderWidth, bool isFilled, const Color& fillColor){
 
         if(isFilled){
-
             //si el interior esta coloreejat pintemm
-
             for(int j = y + borderWidth; j < + h - borderWidth; j++){
 
                 //slide 6: i= y*w+x memory acces using 2D cordinates
@@ -202,9 +200,62 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
 
 //Draw Triangle ratertization method implementation 2.1.3
 
+// 1) We first need the implementation of ScanLinesDDA
+
+void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table, int minY)
+{
+    //garantitza que sempre iterem cap abaix en la pantalla
+    if (y0 > y1){
+        //direccio cap abaix del processament del triangle
+        // scanline omple la taula del triangle up down order
+        ScanLineDDA(x1, y1, x0, y0, table, minY);  // punts intercambiats
+        return;
+    }
+
+    //calculem el pendent (sobre y)
+    int dy = y1-y0; //distance
+    int dx = x1-x0;
+    float screen_step = 0;
+
+
+    // avoid zero division errors
+    if (dy != 0) {
+        //calculem el pas a desplacarse per la pantalla
+            screen_step = dx / (float)dy;
+        }
+
+    float x = (float)x0;//necessitem x per anar sumar el pendent en cada iteracio
+
+    for (int y = y0; y <= y1; y++) {
+
+        if (y >= 0 && y < (int)table.size()) {
+
+            //necessitem floats pels calculos decimals de la pendent
+            //cuan necessitem el pixel real final fem recast (int)x
+            table[y].minX = std::min(table[y].minX, (int)x);
+            table[y].maxX = std::max(table[y].maxX, (int)x);
+
+        }
+        x += screen_step;
+    }
+}
+
+
 void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
         bool isFilled, const Color& fillColor)
 {
+    int minY = std::min({ (int)p0.y, (int)p1.y, (int)p2.y });
+	int maxY = std::max({ (int)p0.y, (int)p1.y, (int)p2.y });
+
+	//per no ocupar la menys memoria posible
+	//nomes les files que ocupa el triangle (relatiu y-minY)
+	std::vector<Cell> table(maxY - minY + 1);
+
+	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, table, minY); //p0-p1 line of the triang.
+	ScanLineDDA(p1.x, p1.y, p2.x, p2.y, table, minY); //p1-p2 line of the triang.
+	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, table, minY); //p2-p0 line of the triang.
+
+
 }
 
 

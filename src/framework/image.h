@@ -31,6 +31,17 @@ class Image
 		unsigned char* data; // Bytes with the pixel information
 	} TGAInfo;
 
+	//struct from slides for scanLineDDA and raterize triangles
+    struct Cell {
+        int minX;
+        int maxX;
+    };
+
+
+
+
+
+
 public:
 	unsigned int width;
 	unsigned int height;
@@ -73,10 +84,16 @@ public:
 	// We add the signature for 2.1.1 for LAB1
 	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
 
+	// We add the signature for 2.1.2 for LAB1
 	void DrawRect(int x, int y, int w, int h, const Color& borderColor,
     int borderWidth, bool isFilled, const Color& fillColor);
 
+	// We add the signature for 2.1.3 for LAB1
+	//
+	// we need also ScanLineDDA
+	void ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table, int minY);
 
+	//singature for DrawTriangle implementation
 	void DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
         bool isFilled, const Color& fillColor);
 
