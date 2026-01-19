@@ -13,22 +13,32 @@
 //necessitem un structure enum pels diferents modes del menu
 //tindrem diferents bottons
 enum ButtonType {
+
+
+    //
+    //
     BUTTON_PENCIL,
     BUTTON_LINE,
     BUTTON_RECTANGLE,
     BUTTON_TRIANGLE,
     BUTTON_ERASER,
+
+    //
+    //
     BUTTON_CLEAR,
     BUTTON_LOAD,
     BUTTON_SAVE,
+
+    //colors disponibles segons la
+    // imatge del LAB1
     BUTTON_COLOR_BLACK,
-    BUTTON_COLOR_RED,
-    BUTTON_COLOR_GREEN,
-    BUTTON_COLOR_BLUE,
+    BUTTON_COLOR_WHITE,
+    BUTTON_COLOR_PINK, //pink colour was missing
     BUTTON_COLOR_YELLOW,
+    BUTTON_COLOR_RED,
+    BUTTON_COLOR_BLUE,
     BUTTON_COLOR_CYAN,
-    BUTTON_COLOR_PURPLE,
-    BUTTON_COLOR_WHITE
+    BUTTON_COLOR_GREEN
 };
 
 class Button {
