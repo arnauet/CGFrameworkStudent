@@ -162,7 +162,41 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
     int borderWidth, bool isFilled, const Color& fillColor){
 
+        if(isFilled){
 
+            //si el interior esta coloreejat pintemm
+
+            for(int j = y + borderWidth; j < + h - borderWidth; j++){
+
+                //slide 6: i= y*w+x memory acces using 2D cordinates
+                for(int i = x + borderWidth; i<x +w - borderWidth; i++){
+
+                    //pintem el pixel a la posicio que toc
+                    SetPixel(i,j,fillColor);
+                }
+            }
+        }
+
+        //borderWidth color implementation
+        for(int k=0; k< borderWidth; k++){
+            //iterem segons la quantitat de pixel de 'border'
+            //k es com una capa del gruixor del borde
+            //part deel rectangle horitzontal -> y fixed
+            //y constant amb x canviant -> linea horitzontal
+            for(int i=x; i<x+w; i++){
+                //iterem sobre x+w
+                SetPixel(i, y+k, borderColor); // lines superiors
+                //y+h-1-k la ultima linea d'abaix
+                SetPixel(i, y+h-1-k,borderColor);
+            }
+            //part del rectangle vertical -> x fixed
+            //x constant amb y canviat -> linea vertical
+            for(int j=y; j<y+h; j++){
+                //iterem sobre y+h
+                SetPixel(x + k, j, borderColor);
+                SetPixel(x + w - 1 - k, j, borderColor);
+            }
+        }
 }
 
 
