@@ -243,20 +243,7 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table
 
 void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
         bool isFilled, const Color& fillColor)
-{
-    int minY = std::min({ (int)p0.y, (int)p1.y, (int)p2.y });
-	int maxY = std::max({ (int)p0.y, (int)p1.y, (int)p2.y });
-
-	//per no ocupar la menys memoria posible
-	//nomes les files que ocupa el triangle (relatiu y-minY)
-	std::vector<Cell> table(maxY - minY + 1);
-
-	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, table, minY); //p0-p1 line of the triang.
-	ScanLineDDA(p1.x, p1.y, p2.x, p2.y, table, minY); //p1-p2 line of the triang.
-	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, table, minY); //p2-p0 line of the triang.
-
-
-}
+{}
 
 
 
