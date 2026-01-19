@@ -97,6 +97,10 @@ public:
 	void DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
         bool isFilled, const Color& fillColor);
 
+	//We need to implement DrawwImage signature Lab 2.2
+	void DrawImage(const Image& image, int x, int y);
+
+
 	// Returns a new image with the area from (startx,starty) of size width,height
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);
 

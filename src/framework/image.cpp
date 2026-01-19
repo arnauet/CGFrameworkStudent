@@ -286,7 +286,13 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 
 }
 
+//We need to implement a method for drawwing a menu
+//explicat al enunciat del Lab 2.2
+void Image::DrawImage(const Image& image, int x, int y){
+    //implement draw image>>>
 
+
+}
 
 bool Image::LoadPNG(const char* filename, bool flip_y)
 {
