@@ -145,6 +145,10 @@ public:
 		this->window_width = width;
 		this->window_height = height;
 		this->framebuffer.Resize(width, height);
+		//apliquem l'event de modificar la pantalla
+		// si el usuari modifica el seu tamany tambe
+		//per la part interactiva del Paint-Like
+		this->Paint.Resize(width,height);
 	}
 
 	Vector2 GetWindowSize()
