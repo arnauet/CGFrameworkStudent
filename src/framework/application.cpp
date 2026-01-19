@@ -8,6 +8,12 @@ Application::Application(const char* caption, int width, int height)
 {
 	this->window = createWindow(caption, width, height);
 
+	//to try primitives
+	//utilizant moouse states
+	this->painting = false;
+	this->drag_x0 = this->drag_y0 = 0;
+	this->drag_x1 = this->drag_y1 = 0;
+
 	int w,h;
 	SDL_GetWindowSize(window,&w,&h);
 
@@ -40,10 +46,19 @@ void Application::Render(void)
 {
     framebuffer.Fill(Color::BLACK);
 	// ...
-	framebuffer.DrawLineDDA(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::CYAN);
-	framebuffer.DrawRect(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::BLUE, 5, true , Color::GREEN );
+	//framebuffer.DrawLineDDA(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::CYAN);
+	///framebuffer.DrawRect(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::BLUE, 5, true , Color::GREEN );
+	framebuffer.SetPixel(10, 10, Color::RED);
+	framebuffer.SetPixel(10, framebuffer.height - 11, Color::GREEN);
 
+	if (painting) {
+        int mx, my;
+        SDL_GetMouseState(&mx, &my);
+        drag_x1 = mx;
+        drag_y1 = window_height-my-1;
 
+        framebuffer.DrawLineDDA(drag_x0, drag_y0, drag_x1, drag_y1, Color::CYAN);
+    }
 	framebuffer.Render();
 
 }
@@ -67,17 +82,35 @@ void Application::Update(float seconds_elapsed)
 //    -                            DEcreease Border
 //
 
+// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
 void Application::OnKeyPressed( SDL_KeyboardEvent event )
 {
-	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
-	switch(event.keysym.sym) {
-		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
-	}
+    switch(event.keysym.sym) {
+
+        case SDLK_ESCAPE: exit(0);
+        std::cout << "Tancant aplicacio..." << std::endl;
+        break; // ESC key, kill the app
+
+        //Requested for Lab 1.
+        //interactvity ONKEYPRESSED differentt scenarios
+    	case SDLK_1:break;
+    	case SDLK_2:break;
+        case SDLK_f:break;
+        case SDLK_MINUS: break;
+
+
+
+
+    }
 }
 
 void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
+	    // to try primittives implementation
+		painting = true;
+        drag_x0 = drag_x1 = event.x;
+        drag_y0 = drag_y1 = window_height -1-event.y; //flip Y do to behavior problms
 
 	}
 }
@@ -85,7 +118,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
-
+        painting = false;
 	}
 }
 

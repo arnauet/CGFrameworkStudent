@@ -133,7 +133,7 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
     //cordenades pel DrawLineDDA
     int dx = x1-x0;
     int dy = y1-y0;
-    int screen_steps = std::max(abs(dx), abs(dy));
+    int screen_steps = std::max(std::abs(dx), std::abs(dy));
 
     //cas unic de un solo punto
     if (screen_steps == 0) {
@@ -290,8 +290,6 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 //explicat al enunciat del Lab 2.2
 void Image::DrawImage(const Image& image, int x, int y){
     //implement draw image>>>
-
-
 }
 
 bool Image::LoadPNG(const char* filename, bool flip_y)

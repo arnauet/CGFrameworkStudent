@@ -1,4 +1,4 @@
-/*  
+/*
 	+ This class encapsulates the application, is in charge of creating the data, getting the user input, process the update and render.
 */
 
@@ -8,9 +8,19 @@
 #include "framework.h"
 #include "image.h"
 
+
+class Button {
+    //we need butttons for the menu
+};
+
 class Application
 {
 public:
+
+    //to try primitives
+    bool painting = false;
+    int drag_x0 = 0, drag_y0 = 0;
+    int drag_x1 = 0, drag_y1 = 0;
 
 	// Window
 
