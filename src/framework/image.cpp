@@ -217,25 +217,24 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table
     int dx = x1-x0;
     float screen_step = 0;
 
-
     // avoid zero division errors
-    if (dy != 0) {
+    if (dy != 0){
         //calculem el pas a desplacarse per la pantalla
             screen_step = dx / (float)dy;
         }
 
-    float x = (float)x0;//necessitem x per anar sumar el pendent en cada iteracio
+    float x = (float)x0; //necessitem x per anar sumar el pendent en cada iteracio
 
+    //fila per fila on esta el pixel extrem del triangle
     for (int y = y0; y <= y1; y++) {
-
         if (y >= 0 && y < (int)table.size()) {
-
-            //necessitem floats pels calculos decimals de la pendent
-            //cuan necessitem el pixel real final fem recast (int)x
+            //necessitem floats pels calculs decimals del pendent
+            //pero quan necessitem el pixel real final fem recast (int)x
             table[y].minX = std::min(table[y].minX, (int)x);
             table[y].maxX = std::max(table[y].maxX, (int)x);
 
         }
+        //per cada y estem moventnos horitzontalment una quantitat fixe
         x += screen_step;
     }
 }
@@ -243,7 +242,49 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table
 
 void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
         bool isFilled, const Color& fillColor)
-{}
+{
+    //trobem el punt mes i el mes alt
+    //variables que defineixen el 'bounding box'
+    int minY = std::min({ (int)p0.y, (int)p1.y, (int)p2.y });
+	int maxY = std::max({ (int)p0.y, (int)p1.y, (int)p2.y });
+
+	//per no ocupar la menys memoria posible
+	//nomes les files que ocupa el triangle (relatiu y-minY)
+	std::vector<Cell> table(maxY - minY + 1);
+
+	//una cell per cada fila per la taula AET
+	//cada aresta registrara les coordenades X la taula
+	//per cada trucada tindra el minim i maxim sobre X
+	//la taulaa guardara la delimitacio per cada fila
+	//limit esquerre i limit dret sobre l'eix horitzontal X
+	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, table, minY); //p0-p1 edge per la taula
+	ScanLineDDA(p1.x, p1.y, p2.x, p2.y, table, minY); //p1-p2 edge..
+	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, table, minY); //p2-p0 edge..
+
+	//si sha de pintar el triangle>>>
+	if (isFilled){
+
+	    //iterem pel tamany de la taula creada
+	    for (int y = 0; y < table.size(); ++y) {
+
+			//coordenades totals de la pantalla
+			int scanY = minY + y;
+			int minX = table[y].minX; //limiits horitzontal left
+			int maxX = table[y].maxX; //limiits horitzontal right
+
+			if (minX <= maxX) { //No surtirse fora del rang
+				for (int x = minX; x <= maxX; ++x) {
+					SetPixel(x, scanY, fillColor); //pintem interior del triangle
+				}
+			}
+		}
+	}
+	//Es dibuixa el contorn delimitat del triangle
+	DrawLineDDA(p0.x, p0.y, p1.x, p1.y, borderColor); //dibuixa la aresta p0-p1
+	DrawLineDDA(p1.x, p1.y, p2.x, p2.y, borderColor); //dibuixa la aresta p1-p2
+	DrawLineDDA(p2.x, p2.y, p0.x, p0.y, borderColor); //dibuixa la aresta p2-p0
+
+}
 
 
 
