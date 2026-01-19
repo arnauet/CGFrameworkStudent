@@ -7,10 +7,67 @@
 #include "main/includes.h"
 #include "framework.h"
 #include "image.h"
+#include <vector>
 
+
+//necessitem un structure enum pels diferents modes del menu
+//tindrem diferents bottons
+enum ButtonType {
+    BUTTON_PENCIL,
+    BUTTON_LINE,
+    BUTTON_RECTANGLE,
+    BUTTON_TRIANGLE,
+    BUTTON_ERASER,
+    BUTTON_CLEAR,
+    BUTTON_LOAD,
+    BUTTON_SAVE,
+    BUTTON_COLOR_BLACK,
+    BUTTON_COLOR_RED,
+    BUTTON_COLOR_GREEN,
+    BUTTON_COLOR_BLUE,
+    BUTTON_COLOR_YELLOW,
+    BUTTON_COLOR_CYAN,
+    BUTTON_COLOR_PURPLE,
+    BUTTON_COLOR_WHITE
+};
 
 class Button {
+    public://class necessitem que sigui publica
     //we need butttons for the menu
+    //first load the image porperly of each button
+    Image image;
+    Vector2 position;
+    ButtonType buttonMenu;
+
+
+    Button(){} //constr
+
+    //button constructor with path a la imatge
+    //posicio del button al frame
+    //button type mitjancant Enum per saber el tipus
+    Button(const char* imagePath, int x, int y, ButtonType t) {
+        //we fullfill each attribute
+        image.LoadPNG(imagePath);
+        position.set(x, y);
+        buttonMenu = t; //from attributes
+    }
+
+    //checkpooint de si el mouse esta dins del button
+    //per comprovar si el mouse esta hovering la imatge del ButtonMenu
+    bool IsMouseInside(const Vector2& mousePos) {
+        return
+        //hovering mentres el mouse estigui sobre el button
+            mousePos.x >= position.x &&
+            mousePos.x < position.x + image.width &&
+            mousePos.y >= position.y &&
+            mousePos.y < position.y + image.height;
+    }
+
+    //dibuixa el button al framebuffer
+    void Render(Image& framebuffer) {
+        framebuffer.DrawImage(image, (int)position.x, (int)position.y);
+    }
+
 };
 
 class Application
@@ -18,11 +75,26 @@ class Application
 public:
 
     //to try primitives
-    bool painting = false;
-    int drag_x0 = 0, drag_y0 = 0;
-    int drag_x1 = 0, drag_y1 = 0;
+    //bool painting = false;
+    //Vector2 startPoint;
+    //Vector2 secondPoint;  // Para triángulos (necesitas 3 puntos)
 
-    Image imagen;
+
+    //elements que necessitem per implementar
+    //el Menu del nostre paintlike
+    std::vector<Button> Menu; //list of buttons
+    ButtonType currentTool;
+    Color currentColor;
+    int triangleClickCount = 0;
+    int menuHeight;
+    bool painting = false;
+
+    //drawn points needed
+    Vector2 startPoint;
+    Vector2 secondPoint;
+
+    //user painting screen>>
+    Image Paint;
 
 
 	// Window

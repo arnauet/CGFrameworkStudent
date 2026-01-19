@@ -10,9 +10,9 @@ Application::Application(const char* caption, int width, int height)
 
 	//to try primitives
 	//utilizant moouse states
-	this->painting = false;
-	this->drag_x0 = this->drag_y0 = 0;
-	this->drag_x1 = this->drag_y1 = 0;
+	//this->painting = false;
+	//this->drag_x0 = this->drag_y0 = 0;
+	//this->drag_x1 = this->drag_y1 = 0;
 
 	int w,h;
 	SDL_GetWindowSize(window,&w,&h);
@@ -24,8 +24,14 @@ Application::Application(const char* caption, int width, int height)
 	this->keystate = SDL_GetKeyboardState(nullptr);
 
 	//bool isFilled = true;
-
 	this->framebuffer.Resize(w, h);
+
+	//for the final Menu
+	this->currentTool = BUTTON_PENCIL;
+    this->currentColor = Color::WHITE;
+    this->painting = false;
+    this->triangleClickCount = 0;
+    this->menuHeight = 32;
 }
 
 Application::~Application()
@@ -36,13 +42,31 @@ void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
 
+	//black screen by default
+	Paint.Resize(window_width, window_height);
+	Paint.Fill(Color::BLACK);
+
 	//uploading image to try see DrawImage working.
-	bool ok = imagen.LoadPNG("images/save.png", true);
-	std::cout << "Loaded? " << ok << " size=" << imagen.width << "x" << imagen.height << "\n";
+	//bool ok = imagen.LoadPNG("images/save.png", true);
+	//std::cout << "Loaded? " << ok << " size=" << imagen.width << "x" << imagen.height << "\n";
+	//A veure si funciona un sol boto del Menu final
+
+	///carreguem bottons del menu
+	int buttonSize = 32;
+    int x = 0;
+    int y = 0;
+    //first menu
+    Menu.push_back(Button("images/pencil.png", x, y, BUTTON_PENCIL));
+    x += buttonSize;
+    Menu.push_back(Button("images/line.png", x, y, BUTTON_LINE));
+        x += buttonSize;
+
+
+
+    std::cout << "Menu carregat amb " << Menu.size() << " botons" << std::endl;
+
 
 }
-
-
 
 //REMEMBER>>>!!!!
 //to compile cmake --build . -j"$(nproc)"
@@ -51,28 +75,24 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-    framebuffer.Fill(Color::BLACK);
+    // el nostre paint conte tot el que el usuari
+    // dibuixa a la screen, llavors li passem
+    // al framebuffer
+    framebuffer.DrawImage(Paint, 0, 0);
 
+    //si l'usuari esta pintant
 
-    framebuffer.DrawImage(imagen, 50,50);
-	// ...
-	//framebuffer.DrawLineDDA(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::CYAN);
-	///framebuffer.DrawRect(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::BLUE, 5, true , Color::GREEN );
-
-
-	if (painting) {
-        int mx, my;
-        SDL_GetMouseState(&mx, &my);
-        drag_x1 = mx;
-        drag_y1 = window_height-my-1;
-
-        framebuffer.DrawLineDDA(drag_x0, drag_y0, drag_x1, drag_y1, Color::CYAN);
+    if(painting){
+        //procedure
     }
 
-	//to try image implementation
-	//
 
-	framebuffer.Render();
+
+    //Actualitzem i dibuixem el menu del projecte
+    for (int i = 0; i < Menu.size(); i++) {
+            Menu[i].Render(framebuffer);
+        }
+        framebuffer.Render();
 
 }
 
@@ -121,9 +141,9 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
 	    // to try primittives implementation
-		painting = true;
-        drag_x0 = drag_x1 = event.x;
-        drag_y0 = drag_y1 = window_height -1-event.y; //flip Y do to behavior problms
+		//painting = true;
+        //drag_x0 = drag_x1 = event.x;
+        //drag_y0 = drag_y1 = window_height -1-event.y; //flip Y do to behavior problms
 
 	}
 }
@@ -131,7 +151,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
-        painting = false;
+        //painting = false;
 	}
 }
 
