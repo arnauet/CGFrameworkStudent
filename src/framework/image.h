@@ -73,6 +73,13 @@ public:
 	// We add the signature for 2.1.1 for LAB1
 	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
 
+	void DrawRect(int x, int y, int w, int h, const Color& borderColor,
+    int borderWidth, bool isFilled, const Color& fillColor);
+
+
+	void DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
+        bool isFilled, const Color& fillColor);
+
 	// Returns a new image with the area from (startx,starty) of size width,height
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);
 

@@ -127,7 +127,7 @@ void Image::FlipY()
 	delete[] temp_row;
 }
 
-//Drawing lines by DDA
+//Drawing lines by DDA method Primitiva 2.1.2
 
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 {
@@ -156,6 +156,24 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 		y += stepY; // Increment y + step
 	}
 }
+
+//Draw rectangle method impleentation Primitive 2.1.2
+
+void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
+    int borderWidth, bool isFilled, const Color& fillColor){
+
+
+}
+
+
+//Draw Triangle ratertization method implementation 2.1.3
+
+void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor,
+        bool isFilled, const Color& fillColor)
+{
+}
+
+
 
 bool Image::LoadPNG(const char* filename, bool flip_y)
 {
