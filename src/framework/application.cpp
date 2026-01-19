@@ -35,21 +35,30 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
+
+	//uploading image to try see DrawImage working.
+	bool ok = imagen.LoadPNG("images/save.png", true);
+	std::cout << "Loaded? " << ok << " size=" << imagen.width << "x" << imagen.height << "\n";
+
 }
 
+
+
+//REMEMBER>>>!!!!
 //to compile cmake --build . -j"$(nproc)"
 //to execute ./ComputerGraphics
-
 
 // Render one frame
 void Application::Render(void)
 {
     framebuffer.Fill(Color::BLACK);
+
+
+    framebuffer.DrawImage(imagen, 50,50);
 	// ...
 	//framebuffer.DrawLineDDA(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::CYAN);
 	///framebuffer.DrawRect(150, 150, 150 + 100 * cos(time), 150 + 200 * sin(time), Color::BLUE, 5, true , Color::GREEN );
-	framebuffer.SetPixel(10, 10, Color::RED);
-	framebuffer.SetPixel(10, framebuffer.height - 11, Color::GREEN);
+
 
 	if (painting) {
         int mx, my;
@@ -59,6 +68,10 @@ void Application::Render(void)
 
         framebuffer.DrawLineDDA(drag_x0, drag_y0, drag_x1, drag_y1, Color::CYAN);
     }
+
+	//to try image implementation
+	//
+
 	framebuffer.Render();
 
 }

@@ -182,10 +182,10 @@ class Matrix44
 		Matrix44(const float* v);
 
 		void Set(
-			float r1c1, float r1c2, float r1c3, float r1c4, 
-			float r2c1, float r2c2, float r2c3, float r2c4, 
-			float r3c1, float r3c2, float r3c3, float r3c4, 
-			float r4c1, float r4c2, float r4c3, float r4c4 
+			float r1c1, float r1c2, float r1c3, float r1c4,
+			float r2c1, float r2c2, float r2c3, float r2c4,
+			float r3c1, float r3c2, float r3c3, float r3c4,
+			float r4c1, float r4c2, float r4c3, float r4c4
 		);
 		void Clear();
 		void SetIdentity();

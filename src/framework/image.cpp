@@ -286,10 +286,23 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 
 }
 
-//We need to implement a method for drawwing a menu
+//We need to implement a method for drawwing an image
 //explicat al enunciat del Lab 2.2
-void Image::DrawImage(const Image& image, int x, int y){
+void Image::DrawImage(const Image& img, int x, int y){
     //implement draw image>>>
+    //es podria hardcodejar perque seran simbols de 32 pixel (al LAB1)
+    //ho fem ampliable a qualsevol imatge iterant sobre widht
+    for(int j = 0; j<(int)img.height; j++){
+        //iterem sobre height
+        for(int i = 0; i<(int)img.width; i++){
+            //calculem on va el pixel en les coredenades finals de la pantalla
+            // seguint la formula dels slides sobre el framebuffer
+            //int bigX = x + i;
+            //int bigY = y + j;
+            //dibuixem el pixel
+            SetPixel(x + i, y + j, img.GetPixel(i, j));
+        }
+    }
 }
 
 bool Image::LoadPNG(const char* filename, bool flip_y)

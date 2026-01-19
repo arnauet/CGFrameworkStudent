@@ -31,7 +31,7 @@ std::string absResPath( const std::string& p_sFile )
 {
 	std::string sFullPath;
 	std::string sFileName;
-	std::string sFixedPath = std::string("../../res/") + p_sFile;
+	std::string sFixedPath = std::string("../res/") + p_sFile;
 
 #if defined(WIN32)
 	char result[PATH_MAX];
@@ -98,7 +98,7 @@ SDL_Window* createWindow(const char* caption, int width, int height )
 
 	// Create the window
 	SDL_Window *window = SDL_CreateWindow(
-		caption, 100, 100, width, height, 
+		caption, 100, 100, width, height,
 		SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 
 	if(!window)
@@ -106,7 +106,7 @@ SDL_Window* createWindow(const char* caption, int width, int height )
 		fprintf(stderr, "Window creation error: %s\n", SDL_GetError());
 		exit(-1);
 	}
-  
+
 	SDL_SysWMinfo  wmInfo;
 	SDL_VERSION(&wmInfo.version);
 	SDL_GetWindowWMInfo(window, &wmInfo);

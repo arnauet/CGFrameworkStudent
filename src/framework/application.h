@@ -22,6 +22,9 @@ public:
     int drag_x0 = 0, drag_y0 = 0;
     int drag_x1 = 0, drag_y1 = 0;
 
+    Image imagen;
+
+
 	// Window
 
 	SDL_Window* window = nullptr;
