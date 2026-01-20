@@ -22,6 +22,7 @@ Application::Application(const char* caption, int width, int height)
 	//for the final Menu
 	this->currentTool = BUTTON_PENCIL;
     this->currentColor = Color::WHITE;
+    this->paintingColor = Color::CYAN;
     this->painting = false;
     this->triangleClickCount = 0;
     this->menuHeight = 32;
@@ -37,11 +38,11 @@ void Application::Init(void)
 
 	//black screen by default
 	Paint.Resize(window_width, window_height);
-	Paint.Fill(Color::BLACK);
+	Paint.Fill(currentColor);
 
 	//uploading image to try see DrawImage working.
 	//bool ok = imagen.LoadPNG("images/save.png", true);
-	//std::cout << "Loaded? " << ok << " size=" << imagen.width << "x" << imagen.height << "\n";
+	//std::cout << "Loadsed? " << ok << " size=" << imagen.width << "x" << imagen.height << "\n";
 	//A veure si funciona un sol boto del Menu final
 
 	///carreguem bottons del menu
@@ -104,6 +105,7 @@ void Application::Render(void)
     // el nostre paint conte tot el que el usuari
     // dibuixa a la screen, llavors li passem
     // al framebuffer perque el copi
+    framebuffer.Fill(Color::BLACK);
     framebuffer.DrawImage(Paint, 0, 0);
 
     //si l'usuari esta pintant
@@ -114,7 +116,7 @@ void Application::Render(void)
                 framebuffer.DrawLineDDA(
                     startPoint.x, startPoint.y,
                     mouse_position.x, mouse_position.y,
-                    currentColor
+                    paintingColor
                 );
                 break;
             //cas mode de dibuixar rectangles
@@ -123,18 +125,18 @@ void Application::Render(void)
                     startPoint.x, startPoint.y,
                     mouse_position.x - startPoint.x,
                     mouse_position.y - startPoint.y,
-                    currentColor, 1, false, currentColor
+                    paintingColor, 1, false, paintingColor
                 );
                 break;
             case BUTTON_TRIANGLE:
                 //dibuixant triangle
                 if (triangleClickCount >= 1) {
                     framebuffer.DrawLineDDA(startPoint.x, startPoint.y,
-                        mouse_position.x, mouse_position.y, currentColor);
+                        mouse_position.x, mouse_position.y, paintingColor);
                 }
                 if (triangleClickCount >= 2) {
                     framebuffer.DrawLineDDA(secondPoint.x, secondPoint.y,
-                        mouse_position.x, mouse_position.y, currentColor);
+                        mouse_position.x, mouse_position.y, paintingColor);
                 }
                 break;
             default:
@@ -146,12 +148,14 @@ void Application::Render(void)
     for (int i = 0; i < Menu.size(); i++) {//iterem sobre el vector menu
             Menu[i].Render(framebuffer);
         }
+
     framebuffer.Render();//actualitzem el framebuffer amb icons i la resta
 }
 
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
+
 
 }
 
@@ -203,47 +207,52 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                 //selecccio del color de la pantalla a traves del menu inferior
                 if (temporal_type >= BUTTON_COLOR_BLACK) {
                     switch (temporal_type) {
+
                         case BUTTON_COLOR_BLACK:
+                            //dinamica CASES primer triem el color
+                            //que ha triat el usuari
+                            //tornem a pintar el Paint amb el colo escollit
+                            //missatge a CLI & break
                             currentColor = Color::BLACK;
-                            Paint.Fill(currentColor);
+                           // Paint.Fill(currentColor);
                             std::cout << "Color canviat a negre" << std::endl;
                             break;
-
                         case BUTTON_COLOR_WHITE:
+                            //dinamica igual al del primer cas
                             currentColor = Color::WHITE;
-                            Paint.Fill(currentColor);
+                            //Paint.Fill(currentColor); //updating current color
                             std::cout << "Color canviat a blanc " << std::endl;
                             break;
-
                         case BUTTON_COLOR_RED:
                             currentColor = Color::RED;
+                            //Paint.Fill(currentColor);
                             std::cout << "Color canviat a vermell " << std::endl;
                             break;
-
                         case BUTTON_COLOR_BLUE:
                             currentColor = Color::BLUE;
+                           // Paint.Fill(currentColor);
                             std::cout << "Color canviat a bblau " << std::endl;
                             break;
-
                         case BUTTON_COLOR_YELLOW:
                             currentColor = Color::YELLOW;
-                            std::cout << "Color canviat a groc" << std::endl;
+                            //Paint.Fill(currentColor);
+                            std::cout << "Colour canviat a groc" << std::endl;
                             break;
-
                         case BUTTON_COLOR_CYAN:
                             currentColor = Color::CYAN;
-                            std::cout << "Color canviat a cyan" << std::endl;
+                            //Paint.Fill(currentColor);
+                            std::cout << "Color canviatt a cyan" << std::endl;
                             break;
-
                         case BUTTON_COLOR_PINK:
-                            currentColor = Color::PURPLE;
+                            currentColor = Color(255,182,193);
+                            //Paint.Fill(currentColor);//pink background
+                            std::cout << "Color canviat a rosaa" << std::endl;
                             break;
-
                         default: break;
                     }
                 }
-                // handlint els botons diferents
-                // amb ambb aplicacions complexes
+                //Controlant els botons diferents
+                // amb ambb funcionalitat mes complexes
                 else if (temporal_type == BUTTON_PENCIL    ||
                         temporal_type == BUTTON_LINE       ||
                         temporal_type == BUTTON_RECTANGLE  ||
@@ -251,6 +260,11 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                     currentTool = temporal_type;
                     triangleClickCount = 0; // Reset triangle state
                     std::cout << "Eina seleccionada: " << temporal_type << std::endl;
+                }
+                //cleanse mode menuu
+                else if (temporal_type == BUTTON_ERASER) {
+                    Paint.Fill(currentColor); //Netejeem amb el color de fons actual
+                    std::cout << "Canvas netejat" << std::endl;
                 }
                 //per guarda el paint realitzar
                 // per l'usuari en format tga
@@ -289,8 +303,9 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                 std::cout << "Triangle dibuixaat!!" << std::endl;
             }
         } else {
-            // Line, rectangle, pencil - just need start point
+            //...
             startPoint = mousePos;
+            mouse_position = mousePos; //importante per dibubixar ambb el llapis
             painting = true;
         }
 	}
@@ -300,7 +315,10 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
-	if (event.button == SDL_BUTTON_LEFT && painting) {
+    //En cas que l'usuari hagi escollit fons
+    //Paint.Fill(currentColor);// refresh the background
+
+    if (event.button == SDL_BUTTON_LEFT && painting) {
 
 	    //utilitzem vector2 per guarda la mouse position
         Vector2 mousePos(event.x, window_height - event.y - 1);
@@ -309,10 +327,12 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
                 Paint.DrawLineDDA(
                     startPoint.x, startPoint.y,
                     mousePos.x, mousePos.y,
-                    currentColor
+                    paintingColor
                 );
+
                 //debugging purposes
                 std::cout << "Linia dibuixaada!" << std::endl;
+                painting = false;
                 break;
 
             case BUTTON_RECTANGLE:
@@ -322,9 +342,10 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
                     startPoint.x, startPoint.y,
                     mousePos.x - startPoint.x,
                     mousePos.y - startPoint.y,
-                    currentColor, 1, true, currentColor
+                    currentColor, 1, true, paintingColor
                 );
                 std::cout << "Rectanggle dibuixat!" << std::endl;
+                painting = false;
                 break;
 
             case BUTTON_PENCIL:
@@ -338,7 +359,7 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
             default:
                 painting = false;
                 break;
-            }
+        }
 	}
 }
 
@@ -352,7 +373,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
         Paint.DrawLineDDA(
             mouse_position.x, mouse_position.y,
             mousePos.x, mousePos.y,
-            currentColor
+            paintingColor
         );
     }
 

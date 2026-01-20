@@ -94,7 +94,11 @@ public:
     //el Menu del nostre paintlike
     std::vector<Button> Menu; //list of buttons
     ButtonType currentTool;
-    Color currentColor;
+
+    //variables pels colors
+    Color currentColor; //bbbackground colour
+    Color paintingColor; //created another variable
+
     int triangleClickCount = 0;
     int menuHeight;
     bool painting = false;
@@ -148,7 +152,10 @@ public:
 		//apliquem l'event de modificar la pantalla
 		// si el usuari modifica el seu tamany tambe
 		//per la part interactiva del Paint-Like
-		this->Paint.Resize(width,height);
+		Image oldPaint = this->Paint; //guardem contingut abbans del resize
+		this->Paint.Resize(width, height);
+		this->Paint.Fill(currentColor);  //omplint pixels
+		this->Paint.DrawImage(oldPaint, 0, 0);//restauurem el contigut del pain
 	}
 
 	Vector2 GetWindowSize()

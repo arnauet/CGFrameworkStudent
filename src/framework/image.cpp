@@ -162,12 +162,22 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
     int borderWidth, bool isFilled, const Color& fillColor){
 
+        if (w < 0) {
+            x = x + w;
+            w = -w;
+        }
+        if (h < 0) {
+            y = y + h;
+            h = -h;
+        }
+
         if(isFilled){
             //si el interior esta coloreejat pintemm
-            for(int j = y + borderWidth; j < + h - borderWidth; j++){
+            //faltava la y en la condicio del loop
+            for(int j = y + borderWidth; j < y + h - borderWidth; j++){
 
                 //slide 6: i= y*w+x memory acces using 2D cordinates
-                for(int i = x + borderWidth; i<x +w - borderWidth; i++){
+                for(int i = x + borderWidth; i< x +w - borderWidth; i++){
 
                     //pintem el pixel a la posicio que toc
                     SetPixel(i,j,fillColor);
@@ -227,11 +237,14 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell>& table
 
     //fila per fila on esta el pixel extrem del triangle
     for (int y = y0; y <= y1; y++) {
-        if (y >= 0 && y < (int)table.size()) {
+        //index relatiu a la Taula!!! Sino sortim dels limits del triangle
+        int idx = y - minY;
+        if (idx >= 0 && idx < (int)table.size()) {
+            int ix = (int)std::round(x);//per simplificar sintaxis
             //necessitem floats pels calculs decimals del pendent
             //pero quan necessitem el pixel real final fem recast (int)x
-            table[y].minX = std::min(table[y].minX, (int)x);
-            table[y].maxX = std::max(table[y].maxX, (int)x);
+            table[idx].minX = std::min(table[idx].minX, ix);
+            table[idx].maxX = std::max(table[idx].maxX, ix);
 
         }
         //per cada y estem moventnos horitzontalment una quantitat fixe
@@ -251,6 +264,17 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 	//per no ocupar la menys memoria posible
 	//nomes les files que ocupa el triangle (relatiu y-minY)
 	std::vector<Cell> table(maxY - minY + 1);
+
+	// IMPORTANT: Inicialitzar cada Cell!
+	//per evitar errors de comportaments estranys
+	// amb la visualitzacio de triangles.
+	for (int i = 0; i < table.size(); i++) {
+	    //table[i].minX = 0;
+	    //table[i].maxX = 0;
+		//per no fer un #include extra
+		table[i].minX = 2147483647;  //INTMAX de climits
+	    table[i].maxX = -2147483648; //INTMAX
+	}
 
 	//una cell per cada fila per la taula AET
 	//cada aresta registrara les coordenades X la taula
