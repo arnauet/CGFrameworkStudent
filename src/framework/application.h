@@ -99,6 +99,8 @@ public:
     Color currentColor; //bbbackground colour
     Color paintingColor; //created another variable
 
+    //helpers per meteodes de dibbuix
+    // i per la barra del menu
     int triangleClickCount = 0;
     int menuHeight;
     bool painting = false;
@@ -110,9 +112,11 @@ public:
     //user painting screen>>
     Image Paint;
 
+    //user painting interactivity
+    bool fillShapes = true; //for F toggle interactivitty
+    int borderWidth = 1; //for -/+ toggle interactivitty
 
 	// Window
-
 	SDL_Window* window = nullptr;
 	int window_width;
 	int window_height;

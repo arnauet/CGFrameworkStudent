@@ -125,7 +125,9 @@ void Application::Render(void)
                     startPoint.x, startPoint.y,
                     mouse_position.x - startPoint.x,
                     mouse_position.y - startPoint.y,
-                    paintingColor, 1, false, paintingColor
+                    // addint interactivity paintingColor, 1, false, paintingColor
+                    //utilitznat nova variable bborderWidth
+                    paintingColor, borderWidth, false, paintingColor
                 );
                 break;
             case BUTTON_TRIANGLE:
@@ -159,36 +161,54 @@ void Application::Update(float seconds_elapsed)
 
 }
 
-// TO ADD INTERACTIVITY
-//
-// KEYS NEEDED FOR LAB 1  ----- ACTION EXPECTED
-//
-//    1                             Paint mode
-//    2                              Animation
-//    F                             Fill Shapes
-//    +                            Increase Border
-//    -                            DEcreease Border
-//
 
 // KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
 void Application::OnKeyPressed( SDL_KeyboardEvent event )
 {
+    // TO ADD INTERACTIVITY
+    //
+    // KEYS NEEDED FOR LAB 1 ------------  ACTION EXPECTED
+    //
+    //       1                               Paint mode
+    //       2                               Animation
+    //       F                              Fill Shapes
+    //       +                             Increase Border
+    //       -                             DEcreease Border
+
     switch(event.keysym.sym) {
+        case SDLK_ESCAPE:
+            std::cout << "Tancant aplicacio..." << std::endl;
+            exit(0); //ESC to kill the app..
+            break;
 
-        case SDLK_ESCAPE: exit(0);
-        std::cout << "Tancant aplicacio..." << std::endl;
-        break; // ESC key, kill the app
+        case SDLK_1:
+            std::cout << "Mode: PAINT!!" << std::endl;
+            // Ja estem en mode paint per defaultt
+            break;
 
-        //Requested for Lab 1.
-        //interactvity ONKEYPRESSED differentt scenarios
-    	case SDLK_1:
-        break;
-    	case SDLK_2:
-        break;
+        case SDLK_2:
+            //pendent d'implementacio
+            std::cout << "Mode: ANIMATION" << std::endl;
+            break;
+
         case SDLK_f:
-        break;
+            fillShapes = !fillShapes;
+            std::cout << "Fill shapes: " << (fillShapes ? "Omplint figures!" : "figurees vuides!!") << std::endl;
+            break;
+
+        case SDLK_PLUS:
+        case SDLK_KP_PLUS:  // Teclat numèric
+        case SDLK_EQUALS:  //incrementacio del gruixut ambb +
+            borderWidth++;
+            std::cout << "Border width: " << borderWidth << std::endl;
+            break;
+
+        //borderminus retraccio amb -
         case SDLK_MINUS:
-        break;
+        case SDLK_KP_MINUS:
+            if (borderWidth > 1) borderWidth--;
+            std::cout << "Border width: " << borderWidth << std::endl;
+            break;
     }
 }
 
@@ -203,6 +223,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
         //iterem sobre el menu disponible del user
         for (size_t i = 0; i < Menu.size(); i++) {
             if (Menu[i].IsMouseInside(mousePos)) {
+
                 ButtonType temporal_type = Menu[i].buttonMenu; //boto temporal per trial menu
                 //selecccio del color de la pantalla a traves del menu inferior
                 if (temporal_type >= BUTTON_COLOR_BLACK) {
@@ -213,38 +234,38 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                             //que ha triat el usuari
                             //tornem a pintar el Paint amb el colo escollit
                             //missatge a CLI & break
-                            currentColor = Color::BLACK;
+                            paintingColor = Color::BLACK;
                            // Paint.Fill(currentColor);
                             std::cout << "Color canviat a negre" << std::endl;
                             break;
                         case BUTTON_COLOR_WHITE:
                             //dinamica igual al del primer cas
-                            currentColor = Color::WHITE;
+                            paintingColor = Color::WHITE;
                             //Paint.Fill(currentColor); //updating current color
                             std::cout << "Color canviat a blanc " << std::endl;
                             break;
                         case BUTTON_COLOR_RED:
-                            currentColor = Color::RED;
+                            paintingColor = Color::RED;
                             //Paint.Fill(currentColor);
                             std::cout << "Color canviat a vermell " << std::endl;
                             break;
                         case BUTTON_COLOR_BLUE:
-                            currentColor = Color::BLUE;
+                            paintingColor = Color::BLUE;
                            // Paint.Fill(currentColor);
                             std::cout << "Color canviat a bblau " << std::endl;
                             break;
                         case BUTTON_COLOR_YELLOW:
-                            currentColor = Color::YELLOW;
+                            paintingColor = Color::YELLOW;
                             //Paint.Fill(currentColor);
                             std::cout << "Colour canviat a groc" << std::endl;
                             break;
                         case BUTTON_COLOR_CYAN:
-                            currentColor = Color::CYAN;
+                            paintingColor = Color::CYAN;
                             //Paint.Fill(currentColor);
                             std::cout << "Color canviatt a cyan" << std::endl;
                             break;
                         case BUTTON_COLOR_PINK:
-                            currentColor = Color(255,182,193);
+                            paintingColor = Color(255,182,193);
                             //Paint.Fill(currentColor);//pink background
                             std::cout << "Color canviat a rosaa" << std::endl;
                             break;
@@ -297,7 +318,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                 //dibuixem el triangle ambb
                 //el metode implementat a imatge.cpp
                 Paint.DrawTriangle(startPoint, secondPoint, mousePos,
-                    currentColor, true, currentColor);
+                    paintingColor, fillShapes, paintingColor); //fixed error ambb currenColour
                 triangleClickCount = 0;
                 painting = false;
                 std::cout << "Triangle dibuixaat!!" << std::endl;
@@ -342,7 +363,8 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
                     startPoint.x, startPoint.y,
                     mousePos.x - startPoint.x,
                     mousePos.y - startPoint.y,
-                    currentColor, 1, true, paintingColor
+                    //adding interactivity from --> currentColor, 1, true, paintingColor  /
+                    paintingColor, borderWidth, fillShapes, paintingColor
                 );
                 std::cout << "Rectanggle dibuixat!" << std::endl;
                 painting = false;
