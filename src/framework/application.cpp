@@ -318,7 +318,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                 //dibuixem el triangle ambb
                 //el metode implementat a imatge.cpp
                 Paint.DrawTriangle(startPoint, secondPoint, mousePos,
-                    paintingColor, fillShapes, paintingColor); //fixed error ambb currenColour
+                    paintingColor, fillShapes, Color(255,105,180)); //fixed error ambb currenColour
                 triangleClickCount = 0;
                 painting = false;
                 std::cout << "Triangle dibuixaat!!" << std::endl;
