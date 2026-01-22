@@ -6,6 +6,7 @@
 
 #include "main/includes.h"
 #include "framework.h"
+#include "ParticleSystem.h"
 #include "image.h"
 #include <vector>
 
@@ -15,8 +16,8 @@
 enum ButtonType {
 
 
-    //
-    //
+    //agrupem els bottons
+    //per fer el menu
     BUTTON_PENCIL,
     BUTTON_LINE,
     BUTTON_RECTANGLE,
@@ -84,11 +85,11 @@ class Application
 {
 public:
 
-    //to try primitives
-    //bool painting = false;
-    //Vector2 startPoint;
-    //Vector2 secondPoint;  // Para triángulos (necesitas 3 puntos)
-
+    //variables necesaries
+    // per implementar animacions
+    // i visualitzar les particules
+    ParticleSystem particleSystem;
+    bool animationMode = false;
 
     //elements que necessitem per implementar
     //el Menu del nostre paintlike
