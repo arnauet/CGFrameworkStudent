@@ -24,8 +24,8 @@ enum ButtonType {
     BUTTON_TRIANGLE,
     BUTTON_ERASER,
 
-    //
-    //
+    //butttons de funcions
+    //especials guardar, carregar, netejar
     BUTTON_CLEAR,
     BUTTON_LOAD,
     BUTTON_SAVE,

@@ -5,15 +5,15 @@
 
 class ParticleSystem {
 
-        static const int MAX_PARTICLES = 20000;
+        static const int MAX_PARTICLES = 20000; //maxim de particules
 
         struct Particle {
-                Vector2 position;
-                Vector2 velocity; // Normalized speed and direction of the particle
-                Color color;
-                float acceleration;
-                float ttl; // Time left until the particle expires
-                bool inactive; // Particle is not used/expired, so it can be recreated
+                Vector2 position; //positio de les particule
+                Vector2 velocity; //Veocitat de les particules
+                Color color; //color rgb
+                float acceleration; // acceleracio
+                float ttl; // temps de vida fins q la particula reinicia
+                bool inactive; //quan les particules eexpirem reinicien
         };
 
         Particle particles[MAX_PARTICLES];

@@ -108,6 +108,11 @@ void Application::Render(void)
     framebuffer.Fill(Color::BLACK);
     framebuffer.DrawImage(Paint, 0, 0);
 
+    //hem de pasar el particle system
+    // les smateixes coordenades de la pantalla
+    //particleSystem.Init(window_width, window_height);
+
+
     //si l'usuari esta pintant
     if (painting) {
         switch (currentTool) {
@@ -151,6 +156,13 @@ void Application::Render(void)
             Menu[i].Render(framebuffer);
         }
 
+    //quan el usuari activi
+    // el mode animacio
+    /*
+    if (animationMode) {
+        particleSystem.Render(&framebuffer);
+        } */
+
     framebuffer.Render();//actualitzem el framebuffer amb icons i la resta
 }
 
@@ -187,8 +199,10 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
             break;
 
         case SDLK_2:
-            //pendent d'implementacio
-            std::cout << "Mode: ANIMATION" << std::endl;
+            //variable auxiliar per activar
+            // o desactivar animationMode
+            animationMode = !animationMode;
+            std::cout << "Mode: ANIMATION " << (animationMode ? "ON" : "OFF") << std::endl;
             break;
 
         case SDLK_f:
@@ -204,6 +218,8 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
             break;
 
         //borderminus retraccio amb -
+        // per si de cas altes tecles
+        // o teclat en altres formats  K60/K75..
         case SDLK_MINUS:
         case SDLK_KP_MINUS:
             if (borderWidth > 1) borderWidth--;

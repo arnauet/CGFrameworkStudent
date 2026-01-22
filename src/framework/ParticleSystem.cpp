@@ -1,8 +1,8 @@
 #include "ParticleSystem.h"
 #include <cstdlib>
 
-void ParticleSystem::Init(int screenWidth, int screenHeight) {
 
+void ParticleSystem::Init(int screenWidth, int screenHeight) {
     //aixo serveix per delimitar la pantalla
     //necessitem width i height per controlar
     // la posicio de les particules i no sortnos fora
@@ -33,11 +33,53 @@ void ParticleSystem::Init(int screenWidth, int screenHeight) {
         particles[i].inactive = false;
 
         }
+}
+
+//recorrer totes les particules
+// i dibuixa una per pixel
+// si la particula esta activa
+void ParticleSystem::Render(Image* framebuffer) {
+    for (int i = 0; i < MAX_PARTICLES; i++) {
+        if (!particles[i].inactive) {
+            //casteig per convertir
+            // la posicio de float a Int
+            int x = (int)particles[i].position.x;
+            int y = (int)particles[i].position.y;
+            //dibuixa la particula al pixel q toca
+            // controlem els limites de la pantalla
+            if (x >= 0 && x < width && y >= 0 && y < height)
+                framebuffer->SetPixel(x, y, particles[i].color);
+        }
     }
+}
 
 
-void ParticleSystem::Render(Image* framebuffer) {}
 
 
+void ParticleSystem::Update(float dt) {
+    for (int i = 0; i < MAX_PARTICLES; i++) {
+        if (particles[i].inactive) {
+            //tornen a apareix les particules
+            particles[i].position.x = rand() % width;
+            particles[i].position.y = height;  // Dalt de tot screen
+            particles[i].ttl = (rand() % 500) / 100.0f + 2.0f;
+            particles[i].inactive = false;
+        }
 
-void ParticleSystem::Update(float dt) {}
+        // aactualitzar posició: P_t+1 = P_t + V * dt
+        particles[i].velocity.y -= particles[i].acceleration * dt;
+        particles[i].position.x += particles[i].velocity.x * dt * 60;
+        particles[i].position.y += particles[i].velocity.y * dt * 60;
+
+        //reuint temps de vida
+        particles[i].ttl -= dt;
+
+        //marquem inactiva si surt de la pantalla o mor
+        if (particles[i].ttl <= 0 ||
+            particles[i].position.y < 0 ||
+            particles[i].position.x < 0 ||
+            particles[i].position.x >= width) {
+            particles[i].inactive = true;
+        }
+    }
+}
