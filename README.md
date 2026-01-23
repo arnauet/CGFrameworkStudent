@@ -24,10 +24,10 @@ Dibuixa un rectangle amb suport per:
 Rasteritza un triangle utilitzant la teccnica Active Edge Table (AET) amb `ScanLineDDA`.
 
 #### `DrawCircle(int x0, int y0, int r, const Color& borderColor, int borderWidth, bool isFilled, const Color& fillColor)`
-Dibuixa un cercle amb l'algoritme Midpoint Circle.
+Dibuixa un cercle amb l'algoritme Midpoint Circle referenciat als slides.
 
 #### `DrawImage(const Image& image, int x, int y)`
-Copia una imatge al framebuffer a la posiciio especificada.
+Copiaa una imatge al framebuffer a la posiciio especificada.
 
 ---
 
@@ -76,8 +76,8 @@ Sistema de particules amb 4 animacions diferents. Prem la tecla `2` repetidament
 | `2` | Mode Animacio (canvia entre animacions) |
 | `F` | Toggle Fill Shapes (omplir figures ON/OFF) |
 | `+` | Incrementar gruix del contorn |
-| `-` | Decrementar gruix del contorn |
-| `ESC` | Sortir de l'aplicacio |
+| `-` | Reduir el gruix del contorn |
+| `ESC` | Sortiir de l'aplicacio |
 
 ---
 
@@ -95,7 +95,7 @@ Seleccio de colors disponibles a la barra inferior:
 
 | Boto | Icona | Funcio |
 |------|-------|--------|
-| Esborrar | ![Eraser](res/images/eraser.png) | Neteja el canvas |
+| Esborraar | ![Eraser](res/images/eraser.png) | Neteja el canvas |
 | Guardar | ![Save](res/images/save.png) | Guarda la imatge en format TGA |
 | Carregar | ![Load](res/images/load.png) | Carrega una imatge TGA |
 
@@ -105,11 +105,11 @@ Seleccio de colors disponibles a la barra inferior:
 
 ```
 src/framework/
-├── application.cpp    # Logica principal, gestio d'events
-├── application.h      # Definicio classe Application, Button, enums
-├── image.cpp          # Implementacio primitives grafiques
+├── application.cpp    # gestio d'events i renderitzacios
+├── application.h      # Definicio classes Application, Button, enums
+├── image.cpp          # Implementacio primitives grafiques 2.1.X
 ├── image.h            # Definicio classe Image
-├── ParticleSystem.cpp # Sistema de particules i animacions
+├── ParticleSystem.cpp # Sistema de particules i animaacions
 └── ParticleSystem.h   # Definicio classe ParticleSystem
 
 res/images/
@@ -123,7 +123,7 @@ res/images/
 
 ## Autor
 
-**Arnau** - Universitat Pompeu Fabra (UPF)  
+**Arnau R.** - Universitat Pompeu Fabra (UPF)  
 Computer Graphics 2025-26
 
 ---
@@ -133,3 +133,4 @@ Computer Graphics 2025-26
 - Algoritme DDA: [Wikipedia](https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm))
 - Midpoint Circle: [Wikipedia](https://en.wikipedia.org/wiki/Midpoint_circle_algorithm)
 - Active Edge Table: Apunts de classe
+- README amb llenguatge de marcat IA
