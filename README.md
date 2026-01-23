@@ -62,8 +62,8 @@ Sistema de particules amb 4 animacions diferents. Prem la tecla `2` repetidament
 | Animacio | Captura | Descripcio |
 |----------|---------|------------|
 | **Snow** | ![Snow](res/images/SnowMode.png) | Particules blanques caient com neu |
-| **Starfield** | ![Starfield](res/images/StarfieldMode.png) | Efecte velocitat de la llum amb cues |
-| **Explosion** | ![Explosion](res/images/ExplosionMode.png) | Particules de foc sortint del centre |
+| **Starfield** | ![Starfield](res/images/StarfieldMode.png) | Efecte com una nau spacial|
+| **Explosion** | ![Explosion](res/images/ExplosionMode.png) | Particules sortint del centre |
 | **Implosion** | ![Implosion](res/images/ImplosionMode.png) | Particules convergint al centre |
 
 ---
