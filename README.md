@@ -4,7 +4,7 @@
 
 Aquest projeecte implementa una aplicacio de dibuix estil Paint amb primitives ii amb unes mode de animacions visuals.
 
-![Paint Mode](res/images/Mode1.png)
+![Paint Mode](res/images/hello.png)
 
 ---
 
