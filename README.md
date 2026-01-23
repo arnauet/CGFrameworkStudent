@@ -13,12 +13,12 @@ Aquest projeecte implementa una aplicacio de dibuix estil Paint amb primitives i
 ### 1. Primitives Grafiques (image.cpp)
 
 #### `DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)`
-Dibuixa una linia entre dos punts utilitzant l'algoritme DDA (Digital Differential Analyzer).
+Dibuixa una linia entre dos punts utilitzant l'algoritme DDA
 
 #### `DrawRect(int x, int y, int w, int h, const Color& borderColor, int borderWidth, bool isFilled, const Color& fillColor)`
 Dibuixa un rectangle amb suport per:
-- Contorn amb gruix variable
-- Omplert opcional amb color diferent
+- Contorn amb gruixx variable amb interactivitat -/+
+- Omplert opcional amb color diferent amb interactivitat F
 
 #### `DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor, bool isFilled, const Color& fillColor)`
 Rasteritza un triangle utilitzant la teccnica Active Edge Table (AET) amb `ScanLineDDA`.
