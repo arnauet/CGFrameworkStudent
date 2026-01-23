@@ -192,6 +192,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 
         case SDLK_1:
             std::cout << "Mode: PAINT!!" << std::endl;
+            animationMode= false; //desactivem altres modes
             // Ja estem en mode paint per defaultt
             break;
 

@@ -67,7 +67,7 @@ void ParticleSystem::InitSnow() {
 }
 
 
-//-============= STARFIELD ===============
+//-============= STARFIELD ==============/=
 //animacio tipus velocitat de la llum
 //les particules surten del centre i acceleren
 //deixant una cua que sestiira com mes rapides van
@@ -111,7 +111,7 @@ void ParticleSystem::InitStarfield() {
 }
 
 
-// ==================== EXPLOSION ==========
+// ==================== EXPLOSION ==========//
 //animacio dexplosio de foc des del centre
 //les particules surten rapides i van frenant
 //colors grocs i taronges com flames
@@ -155,7 +155,7 @@ void ParticleSystem::InitExplosion() {
 }
 
 
-// =========== IMPLOSION ====================
+// =========== IMPLOSION ====================/
 //animacio contraria a lexplosio
 //les particules venen dels marges i acceleren cap al centre
 //efecte de forat negre o absorcio
@@ -359,7 +359,7 @@ void ParticleSystem::Update(float dt) {
             if (sqrt(dx*dx + dy*dy) < 5) out = true;
         }
 
-        //desactivem la particula si ha sortit o ha mort
+        //desactivem la particula si ha sortit o ha mort inactiva
         if (out || p.ttl <= 0) {
             p.inactive = true;
         }

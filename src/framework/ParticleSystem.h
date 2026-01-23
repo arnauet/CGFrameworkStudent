@@ -12,12 +12,15 @@ enum AnimationType {
 
 class ParticleSystem {
     static const int MAX_PARTICLES = 150;
-    static const int TRAIL_LENGTH = 10;  // Longitud de la cua
+    //efecte de meteorit
+    static const int TRAIL_LENGTH = 10;  // Longitud deeel trail
 
     struct Particle {
+        //atributs neceesaris
+        // pels efectes de particules
         Vector2 position;
         Vector2 velocity;
-        Vector2 trail[TRAIL_LENGTH];  // Historial de posicions per la cua
+        Vector2 trail[TRAIL_LENGTH];
         int trailIndex;
         Color color;
         float acceleration;
