@@ -18,18 +18,19 @@ enum ButtonType {
 
     //agrupem els bottons
     //per fer el menu
+    //
     BUTTON_PENCIL,
     BUTTON_LINE,
     BUTTON_RECTANGLE,
     BUTTON_TRIANGLE,
     BUTTON_CIRCLE,//was missing
-    BUTTON_ERASER,
 
     //butttons de funcions
     //especials guardar, carregar, netejar
     BUTTON_CLEAR,
     BUTTON_LOAD,
     BUTTON_SAVE,
+    BUTTON_ERASER,
 
     //colors disponibles segons la
     // imatge del LAB1

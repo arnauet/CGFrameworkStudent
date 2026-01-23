@@ -448,6 +448,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
     //pencil mode menu
     // el user continuara pintant mentre es mogui
     if (painting && currentTool == BUTTON_PENCIL) {
+        //fem servir la rutina implementada
         Paint.DrawLineDDA(
             mouse_position.x, mouse_position.y,
             mousePos.x, mousePos.y,
