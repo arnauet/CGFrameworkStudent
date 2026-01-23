@@ -1,26 +1,43 @@
+#pragma once
 #include "image.h"
 #include "framework.h"
 
-
+enum AnimationType {
+    ANIM_SNOW,
+    ANIM_STARFIELD,
+    ANIM_EXPLOSION,
+    ANIM_IMPLOSION,
+    ANIM_COUNT
+};
 
 class ParticleSystem {
+    static const int MAX_PARTICLES = 150;
+    static const int TRAIL_LENGTH = 10;  // Longitud de la cua
 
-        static const int MAX_PARTICLES = 20000; //maxim de particules
+    struct Particle {
+        Vector2 position;
+        Vector2 velocity;
+        Vector2 trail[TRAIL_LENGTH];  // Historial de posicions per la cua
+        int trailIndex;
+        Color color;
+        float acceleration;
+        float ttl;
+        bool inactive;
+    };
 
-        struct Particle {
-                Vector2 position; //positio de les particule
-                Vector2 velocity; //Veocitat de les particules
-                Color color; //color rgb
-                float acceleration; // acceleracio
-                float ttl; // temps de vida fins q la particula reinicia
-                bool inactive; //quan les particules eexpirem reinicien
-        };
+    Particle particles[MAX_PARTICLES];
+    int width, height;
+    AnimationType currentAnim;
 
-        Particle particles[MAX_PARTICLES];
-        int width, height;
+    void InitSnow();
+    void InitStarfield();
+    void InitExplosion();
+    void InitImplosion();
 
 public:
-        void Init(int screenWidth, int screenHeight);
-        void Render(Image* framebuffer);
-        void Update(float dt);
+    void Init(int screenWidth, int screenHeight);
+    void Render(Image* framebuffer);
+    void Update(float dt);
+    void NextAnimation();
+    AnimationType GetCurrentAnimation() { return currentAnim; }
 };

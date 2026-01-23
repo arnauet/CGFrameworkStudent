@@ -21,7 +21,7 @@ Application::Application(const char* caption, int width, int height)
 
 	//for the final Menu
 	this->currentTool = BUTTON_PENCIL;
-    this->currentColor = Color::WHITE;
+    this->currentColor = Color::BLACK;
     this->paintingColor = Color::CYAN;
     this->painting = false;
     this->triangleClickCount = 0;
@@ -51,8 +51,7 @@ void Application::Init(void)
     int y = 0;
 
     //MENU ICON LOAD
-
-    //each loads the path nedeed
+    //each loads the path we need for the icons img
     Menu.push_back(Button("images/pencil.png", x, y, BUTTON_PENCIL));
     x += buttonSize;//desplacem pel proxim button a renderitzar
 
@@ -108,11 +107,6 @@ void Application::Render(void)
     framebuffer.Fill(Color::BLACK);
     framebuffer.DrawImage(Paint, 0, 0);
 
-    //hem de pasar el particle system
-    // les smateixes coordenades de la pantalla
-    //particleSystem.Init(window_width, window_height);
-
-
     //si l'usuari esta pintant
     if (painting) {
         switch (currentTool) {
@@ -158,10 +152,12 @@ void Application::Render(void)
 
     //quan el usuari activi
     // el mode animacio
-    /*
+    //hem de pasar el particle system
+    // les smateixes coordenades de la pantalla
+
     if (animationMode) {
         particleSystem.Render(&framebuffer);
-        } */
+    }
 
     framebuffer.Render();//actualitzem el framebuffer amb icons i la resta
 }
@@ -169,8 +165,9 @@ void Application::Render(void)
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-
-
+    if (animationMode) {
+        particleSystem.Update(seconds_elapsed);
+    }
 }
 
 
@@ -199,11 +196,21 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
             break;
 
         case SDLK_2:
-            //variable auxiliar per activar
-            // o desactivar animationMode
-            animationMode = !animationMode;
-            std::cout << "Mode: ANIMATION " << (animationMode ? "ON" : "OFF") << std::endl;
-            break;
+            if (!animationMode) {
+                animationMode = true;
+                particleSystem.Init(window_width, window_height);
+                std::cout << "Mode: ANIMATION ON (Snow)" << std::endl;
+            } else {
+                particleSystem.NextAnimation();
+                switch (particleSystem.GetCurrentAnimation()) {
+                    case ANIM_SNOW:      std::cout << "Animacio: SNOW" << std::endl; break;
+                    case ANIM_STARFIELD: std::cout << "Animacio: STARFIELD" << std::endl; break;
+                    case ANIM_EXPLOSION: std::cout << "Animacio: EXPLOSION" << std::endl; break;
+                    case ANIM_IMPLOSION: std::cout << "Animacio: IMPLOSION" << std::endl; break;
+                    default: break;
+                        }
+                }
+                break;
 
         case SDLK_f:
             fillShapes = !fillShapes;
