@@ -1,172 +1,135 @@
-# Computer Graphics
-Follow the instructions below to clone, configure, and build the project.
-In case you do not have Git installed, please refer to [Git](https://git-scm.com/) to install it
-#### Clone and initialize the repository:
-```
-git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
-```
 
-Once cloned, you can optionally [work on your own repository](#creating-your-own-repository).
+# Computer Graphics - LAB1
+## Paint Application & Particle System
 
-The framework provided is compatible with all operating systems. Here are the steps for each platform:
-1. [Windows](#windows)
-2. [Mac](#mac)
-3. [Linux](#linux)
+Aquest projeecte implementa una aplicacio de dibuix estil Paint amb primitives ii amb unes mode de animacions visuals.
 
+![Paint Mode](res/images/Mode1.png)
 
-## Windows
-1. Install [MS Visual Studio Community](https://visualstudio.microsoft.com/es/free-developer-offers/) <br>
-&rarr; Select **"Desktop Development with C++"**
-2. Install [*CMake*](https://cmake.org/download/) <br>
-  &rarr; Select "Windows x64 Installer" for the last version. <br>
-  &rarr; Enable **"Add CMake to PATH"** during installation (otherwise CMake won't work in the terminal)
+---
 
-#### Configure the project: <br>
-Open a Windows Terminal, go to the project folder, and run:
-```console
-cd CGFrameworkStudent
-mkdir build
-cd build
-cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.12
-```
+## Funcions Implementades de l'enunciat!!
 
-Double click on the ``.sln`` (or ``.slnx``) VS project inside the ``build/`` folder.
+### 1. Primitives Grafiques (image.cpp)
 
-You are all set!
+#### `DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)`
+Dibuixa una linia entre dos punts utilitzant l'algoritme DDA (Digital Differential Analyzer).
 
-Remember you can optionally [create your own repository](#creating-your-own-repository).
+#### `DrawRect(int x, int y, int w, int h, const Color& borderColor, int borderWidth, bool isFilled, const Color& fillColor)`
+Dibuixa un rectangle amb suport per:
+- Contorn amb gruix variable
+- Omplert opcional amb color diferent
 
-## Mac
-1. Install XCode (you may need to update MacOS version)
-2. Install Homebrew (to install the missing libraries). Open a terminal and run this command:
-```console
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-3. Install *CMake*:
-```console
-brew install cmake
-```
+#### `DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& borderColor, bool isFilled, const Color& fillColor)`
+Rasteritza un triangle utilitzant la teccnica Active Edge Table (AET) amb `ScanLineDDA`.
 
-#### Configure the project: <br>
-Open a MacOS Terminal, go to the project folder, and run:
-```console
-cd CGFrameworkStudent
-mkdir build && cd build
-cmake .. -G "Xcode" -DCMAKE_POLICY_VERSION_MINIMUM=3.12
-```
+#### `DrawCircle(int x0, int y0, int r, const Color& borderColor, int borderWidth, bool isFilled, const Color& fillColor)`
+Dibuixa un cercle amb l'algoritme Midpoint Circle.
 
-Double click on the ``.xcodeproj`` Xcode project inside the ``build/`` folder.
+#### `DrawImage(const Image& image, int x, int y)`
+Copia una imatge al framebuffer a la posiciio especificada.
 
-You are all set!
+---
 
-Remember you can optionally [create your own repository](#creating-your-own-repository).
+### 2. Mode Paint (Tecla 1)
 
-### How to solve errors in Mac build
-#### *CMake* fails
-1. Run this command an try again:
-   ```console
-   sudo xcode-select --reset
-   ```
+L'aplicacio permet dibuixar amb diferents eines:
 
-#### Cannot find C/C++ compilers
-1. Find them using:
-   ```console
-   xcrun -find c++
-   xcrun -find cc
-   ```
+| Eina | Icona | Descripcio |
+|------|-------|------------|
+| Llapis | ![Pencil](res/images/pencil.png) | dibuixar amb Llapis Mode |
+| Linia | ![Line](res/images/line.png) | Clic i arrossega per dibuixar linies Rectes |
+| Rectangle | ![Rectangle](res/images/rectangle.png) | Clic i arrossega per crear Rectangles |
+| Triangle | ![Triangle](res/images/triangle.png) | 3 clics per definir els 3 vertexs dun Triangle |
+| Cercle | ![Circle](res/images/circle.png) | Clic i arrossega per definir radi duna circumferencia|
 
-2. Then, try to build again (inside the build directory) specifying the paths:
-   ```console
-   cmake -D CMAKE_C_COMPILER="Path_of_C_compiler" -D CMAKE_CXX_COMPILER="Path_of_C++_compiler" -G Xcode ..
-   ```
+**Exemples de cada eina:**
 
-#### Xcode compilation error "AGL Framework not found"
+| Linies | Rectangles |
+|--------|------------|
+| ![LineMode](res/images/LineMode.png) | ![RectangleMode](res/images/RectangleMode.png) |
 
-1. Open the "libraries/glew-cmake/CMakeLists.txt" file
-2. Comment/Delete lines 113 & 114
-   ```console
-   find_library(AGL_LIBRARY AGL REQUIRED)
-   list(APPEND LIBRARIES ${AGL_LIBRARY})
-   ```
-4. Execute the ``cmake`` command again
+| Cercles | 
+|---------|
+| ![CircleMode](res/images/CircleMode.png) |
 
-#### Xcode compiles sucessfully but does not show anything
-1. Make sure the "ComputerGraphics" compilation target is selected
-2. If not, click on the red squared item (see image) and select it 
-<img width="880" height="53" alt="xcode_target" src="https://github.com/user-attachments/assets/64cf18a6-292d-44d8-a559-ea29e63e9120" />
+---
 
-3. Compile again
+### 3. Mode Animacio (Tecla 2)
 
-## Linux
-1. Install *CMake*, libraries and compilers using these commands:
-```console
-sudo apt install cmake
-sudo apt install build-essential
-sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
-```
+Sistema de particules amb 4 animacions diferents. Prem la tecla `2` repetidament per canviar entre elles:
 
-#### Configure the project: <br>
-Open a Linux Terminal, go to the project folder, and run:
-```console
-cd CGFrameworkStudent
-mkdir build && cd build
-cmake ..
-```
+| Animacio | Captura | Descripcio |
+|----------|---------|------------|
+| **Snow** | ![Snow](res/images/SnowMode.png) | Particules blanques caient com neu |
+| **Starfield** | ![Starfield](res/images/StarfieldMode.png) | Efecte velocitat de la llum amb cues |
+| **Explosion** | ![Explosion](res/images/ExplosionMode.png) | Particules de foc sortint del centre |
+| **Implosion** | ![Implosion](res/images/ImplosionMode.png) | Particules convergint al centre |
 
-This will generate a Makefile inside the folder ``build/``.
+---
 
-Use ``make`` to compile. You can speed-up compilation using more threads with ``-j(num threads)``, for example: ``make -j8``.
+### 4. Interactivitat (Tecles)
 
-Remember you can optionally [create your own repository](#creating-your-own-repository).
+| Tecla | Accio |
+|-------|-------|
+| `1` | Mode Paint |
+| `2` | Mode Animacio (canvia entre animacions) |
+| `F` | Toggle Fill Shapes (omplir figures ON/OFF) |
+| `+` | Incrementar gruix del contorn |
+| `-` | Decrementar gruix del contorn |
+| `ESC` | Sortir de l'aplicacio |
 
-### Visual Studio Code (Linux)
+---
 
-After installing all the libs for your platform, if you need a more light weight IDE which can be used in any platform (included Linux), this is your better option.
+### 5. Menu de Colors
 
-Visual Studio Code can be downloaded for each platform [here](https://code.visualstudio.com/download).
+Seleccio de colors disponibles a la barra inferior:
 
-**NOTE**: you must have a C/C++ compiler installed and added to the path before progressing with the installation.
+| Negre | Blanc | Rosa | Groc | Vermell | Blau | Cyan |
+|-------|-------|------|------|---------|------|------|
+| ![Black](res/images/black.png) | ![White](res/images/white.png) | ![Pink](res/images/pink.png) | ![Yellow](res/images/yellow.png) | ![Red](res/images/red.png) | ![Blue](res/images/blue.png) | ![Cyan](res/images/cyan.png) |
 
-#### Configuring VSCode
+---
 
-After VSCode and the requirements for each platform are installed **(the steps for each platform are mandatory!)**, the following extensions are needed to work with C++ code:
+### 6. Funcions Addicionals
+
+| Boto | Icona | Funcio |
+|------|-------|--------|
+| Esborrar | ![Eraser](res/images/eraser.png) | Neteja el canvas |
+| Guardar | ![Save](res/images/save.png) | Guarda la imatge en format TGA |
+| Carregar | ![Load](res/images/load.png) | Carrega una imatge TGA |
+
+---
+
+## Estructura del Projecte
 
 ```
-C/C++
-C/C++ Extension Pack
-C/C++ Themes
-Cmake Tools
+src/framework/
+├── application.cpp    # Logica principal, gestio d'events
+├── application.h      # Definicio classe Application, Button, enums
+├── image.cpp          # Implementacio primitives grafiques
+├── image.h            # Definicio classe Image
+├── ParticleSystem.cpp # Sistema de particules i animacions
+└── ParticleSystem.h   # Definicio classe ParticleSystem
+
+res/images/
+├── pencil.png, line.png, rectangle.png, triangle.png, circle.png  # Icones eines
+├── black.png, white.png, pink.png, yellow.png, red.png, blue.png, cyan.png  # Colors
+├── eraser.png, save.png, load.png  # Funcions
+├── Mode1.png  # Captura mode Paint
+├── LineMode.png, RectangleMode.png, CircleMode.png  # Captures eines
+└── SnowMode.png, StarfieldMode.png, ExplosionMode.png, ImplosionMode.png  # Animacions
 ```
 
-Then, on VSCode, open the project folder where the CMakeLists.txt is located and the configuration of the project should start automatically. At this point you should be able to build and run the project using the VSCode interface. 
+## Autor
 
-If not, then open the CMake tab on the left of VSCode, and select the configure and build the project options.
+**Arnau** - Universitat Pompeu Fabra (UPF)  
+Computer Graphics 2025-26
 
-Check [this link](https://gourav.io/blog/setup-vscode-to-run-debug-c-cpp-code) to learn how to debug the framework in Visual Studio Code.
+---
 
+## Referencies
 
-## Creating your own repository
-If you want to push your local copy to your own GitHub repo:
-1. Create an empty private repository on GitHub
-2. Open the terminal
-3. Go to the *CGFrameworkStudent* cloned repository folder:
-```
-  cd CGFrameworkStudent
-```
-4. Point your local repo to your newly created GitHub repo:
-```
-  git remote set-url origin <your-repository-url.git>
-```
-5. **IMPORTANT:** verify both "fetch" and "push" are pointing to your repository:
-```
-  git remote -v
-```
-&emsp;&emsp;You should see:
-```
-  origin  <your-repository-url.git> (fetch)
-  origin  <your-repository-url.git> (push)
-```
-6. Update changes to the remote
-```
-  git push
-```
+- Algoritme DDA: [Wikipedia](https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm))
+- Midpoint Circle: [Wikipedia](https://en.wikipedia.org/wiki/Midpoint_circle_algorithm)
+- Active Edge Table: Apunts de classe
