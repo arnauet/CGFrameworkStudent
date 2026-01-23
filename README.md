@@ -105,20 +105,20 @@ Seleccio de colors disponibles a la barra inferior:
 
 ```
 src/framework/
-├── application.cpp    # gestio d'events i renderitzacios
-├── application.h      # Definicio classes Application, Button, enums
-├── image.cpp          # Implementacio primitives grafiques 2.1.X
-├── image.h            # Definicio classe Image
+├── application.cpp   # gestio d'events i renderitzacios
+├── application.h     # Definicio classes Application, Button, enums
+├── image.cpp      # Implementacio primitives grafiques 2.1.X
+├── image.h     # Definicio classe Image
 ├── ParticleSystem.cpp # Sistema de particules i animaacions
 └── ParticleSystem.h   # Definicio classe ParticleSystem
 
 res/images/
-├── pencil.png, line.png, rectangle.png, triangle.png, circle.png  # Icones eines
-├── black.png, white.png, pink.png, yellow.png, red.png, blue.png, cyan.png  # Colors
-├── eraser.png, save.png, load.png  # Funcions
-├── Mode1.png  # Captura mode Paint
+├── pencil.png, line.png, rectangle.png, triangle.png, circle.png #buttons de les eines
+├── black.png, white.png, pink.png, yellow.png, red.png, blue.png, cyan.png    #Button Colors
+├── eraser.png, save.png, load.png  # Button funcitnoalities
+├── Mode1.png  #Screenshot
 ├── LineMode.png, RectangleMode.png, CircleMode.png  # Captures eines
-└── SnowMode.png, StarfieldMode.png, ExplosionMode.png, ImplosionMode.png  # Animacions
+└── SnowMode.png, StarfieldMode.png, ExplosionMode.png, ImplosionMode.png  #Animations modes
 ```
 
 ## Autor
