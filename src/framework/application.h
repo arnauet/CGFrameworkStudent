@@ -22,6 +22,7 @@ enum ButtonType {
     BUTTON_LINE,
     BUTTON_RECTANGLE,
     BUTTON_TRIANGLE,
+    BUTTON_CIRCLE,//was missing
     BUTTON_ERASER,
 
     //butttons de funcions

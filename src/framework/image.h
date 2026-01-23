@@ -100,6 +100,9 @@ public:
 	//We need to implement DrawwImage signature Lab 2.2
 	void DrawImage(const Image& image, int x, int y);
 
+	//We need DrawCircle for full implementation of the buttons
+	void DrawCircle(int x0, int y0, int r, const Color& borderColor,
+    int borderWidth, bool isFilled, const Color& fillColor);
 
 	// Returns a new image with the area from (startx,starty) of size width,height
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);

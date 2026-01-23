@@ -207,6 +207,51 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& borderColor,
         }
 }
 
+//dibuixar cercle amb algoritme midpoint
+void Image::DrawCircle(int x0, int y0, int r, const Color& borderColor,
+    int borderWidth, bool isFilled, const Color& fillColor) {
+
+    if (r <= 0) return;
+
+    //omplir el cercle si cal
+    if (isFilled) {
+        for (int y = -r; y <= r; y++) {
+            int dx = (int)sqrt(r * r - y * y);
+            for (int x = -dx; x <= dx; x++) {
+                SetPixel(x0 + x, y0 + y, fillColor);
+            }
+        }
+    }
+
+    //dibuixar el contorn amb midpoint algorithm
+    for (int i = 0; i < borderWidth; i++) {
+        int rad = r - i;
+        int x = 0;
+        int y = rad;
+        int d = 1 - rad;
+
+        while (x <= y) {
+            //dibuixem els 8 punts simetrics del cercle
+            SetPixel(x0 + x, y0 + y, borderColor);
+            SetPixel(x0 - x, y0 + y, borderColor);
+            SetPixel(x0 + x, y0 - y, borderColor);
+            SetPixel(x0 - x, y0 - y, borderColor);
+            SetPixel(x0 + y, y0 + x, borderColor);
+            SetPixel(x0 - y, y0 + x, borderColor);
+            SetPixel(x0 + y, y0 - x, borderColor);
+            SetPixel(x0 - y, y0 - x, borderColor);
+
+            //actualitzacio midpoint
+            if (d < 0) {
+                d += 2 * x + 3;
+            } else {
+                d += 2 * (x - y) + 5;
+                y--;
+            }
+            x++;
+        }
+    }
+}
 
 //Draw Triangle ratertization method implementation 2.1.3
 

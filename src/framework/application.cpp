@@ -62,6 +62,8 @@ void Application::Init(void)
     x += buttonSize;
     Menu.push_back(Button("images/triangle.png", x, y, BUTTON_TRIANGLE));
     x += buttonSize;
+    Menu.push_back(Button("images/circle.png", x, y, BUTTON_CIRCLE)); //no habia implementat cerclee!
+    x += buttonSize;
 
     //clear the Painting Screen
     Menu.push_back(Button("images/eraser.png", x, y, BUTTON_ERASER));
@@ -110,7 +112,8 @@ void Application::Render(void)
     //si l'usuari esta pintant
     if (painting) {
         switch (currentTool) {
-            //cas mode de dibbuixar lineees
+            //cas mode de dibbuixar lineees preview
+            // in the frambuffer
             case BUTTON_LINE:
                 framebuffer.DrawLineDDA(
                     startPoint.x, startPoint.y,
@@ -118,7 +121,7 @@ void Application::Render(void)
                     paintingColor
                 );
                 break;
-            //cas mode de dibuixar rectangles
+            //cas mode de dibuixar rectangles pewview
             case BUTTON_RECTANGLE:
                 framebuffer.DrawRect(
                     startPoint.x, startPoint.y,
@@ -129,8 +132,18 @@ void Application::Render(void)
                     paintingColor, borderWidth, false, paintingColor
                 );
                 break;
+            case BUTTON_CIRCLE: {
+                int dx = (int)(mouse_position.x - startPoint.x);
+                int dy = (int)(mouse_position.y - startPoint.y);
+                int r  = (int)std::sqrt((float)(dx*dx + dy*dy));
+
+                framebuffer.DrawCircle((int)startPoint.x, (int)startPoint.y, r,
+                    paintingColor, borderWidth, fillShapes, paintingColor);
+                break;
+            }
+
             case BUTTON_TRIANGLE:
-                //dibuixant triangle
+                //dibuixant triangle preview
                 if (triangleClickCount >= 1) {
                     framebuffer.DrawLineDDA(startPoint.x, startPoint.y,
                         mouse_position.x, mouse_position.y, paintingColor);
@@ -172,7 +185,7 @@ void Application::Update(float seconds_elapsed)
 
 
 // KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
-void Application::OnKeyPressed( SDL_KeyboardEvent event )
+void Application::OnKeyPressed(SDL_KeyboardEvent event )
 {
     // TO ADD INTERACTIVITY
     //
@@ -301,9 +314,10 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                 else if (temporal_type == BUTTON_PENCIL    ||
                         temporal_type == BUTTON_LINE       ||
                         temporal_type == BUTTON_RECTANGLE  ||
-                        temporal_type == BUTTON_TRIANGLE) {
+                        temporal_type == BUTTON_TRIANGLE   ||
+                        temporal_type == BUTTON_CIRCLE) {
                     currentTool = temporal_type;
-                    triangleClickCount = 0; // Reset triangle state
+                    triangleClickCount = 0; // Reset triangle state of clickks
                     std::cout << "Eina seleccionada: " << temporal_type << std::endl;
                 }
                 //cleanse mode menuu
@@ -318,7 +332,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
                     std::cout << "Imatge guardada" << std::endl;
                 }
                 else if (temporal_type == BUTTON_LOAD) {
-                    Paint.LoadTGA("");
+                    Paint.LoadTGA(""); //??? haria de fer alg??
                     std::cout << "Imatge carregada" << std::endl;
                 }
                 return;
@@ -368,6 +382,9 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 	    //utilitzem vector2 per guarda la mouse position
         Vector2 mousePos(event.x, window_height - event.y - 1);
         switch (currentTool) {
+
+            //linea pintada
+            // quan acabam darrosegar
             case BUTTON_LINE:
                 Paint.DrawLineDDA(
                     startPoint.x, startPoint.y,
@@ -394,6 +411,21 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
                 painting = false;
                 break;
 
+            //final dibuix del cercle mentres
+            //quan acabeem darrosogar i button up
+            case BUTTON_CIRCLE:
+            {
+                int dx = (int)(mouse_position.x - startPoint.x);
+                int dy = (int)(mouse_position.y - startPoint.y);
+                int r  = (int)std::sqrt((float)(dx*dx + dy*dy));
+
+                Paint.DrawCircle((int)startPoint.x, (int)startPoint.y, r,
+                    paintingColor, borderWidth, fillShapes, paintingColor);
+
+                painting = false;
+                break;
+            }
+
             case BUTTON_PENCIL:
                 //parem de pintar quan el llapis
                 // aixeca el cursor el usuari
@@ -406,7 +438,7 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
                 painting = false;
                 break;
         }
-	}
+   	}
 }
 
 
